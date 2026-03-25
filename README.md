@@ -1,5 +1,7 @@
 # 📦 Smart Logistics System 🚚
+## 🌐 Live Demo
 
+👉 https://smart-logistics-system.onrender.com
 ## 🔍 Overview
 
 The **Smart Logistics System** is a web-based application that uses AI-based decision logic to recommend the most efficient transport method for delivering goods.
@@ -90,14 +92,6 @@ smart-logistics-system/
 ├── static/
 │   └── style.css
 ```
-
----
-## 🌐 Live Demo
-
-👉 (Add your Render link here after deployment)
-
----
-
 ## ⚠️ Note
 
 * Google Maps requires a valid API key to display routes
