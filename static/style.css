@@ -1,0 +1,37 @@
+body {
+    font-family: 'Segoe UI';
+    background: linear-gradient(to right, #141e30, #243b55);
+    color: white;
+}
+
+.card {
+    width: 500px;
+    margin: 40px auto;
+    padding: 25px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+}
+
+.box {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: orange;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}

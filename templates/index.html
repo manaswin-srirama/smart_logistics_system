@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Logistics</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="card">
+<h1>📦 Smart Logistics System</h1>
+
+<form action="/choose" method="POST">
+
+<label>Start City</label>
+<select name="start">
+{% for city in cities %}
+<option>{{ city }}</option>
+{% endfor %}
+</select>
+
+<label>Number of Deliveries</label>
+<select id="deliveryCount" onchange="generateForms()">
+<option value="1">Single</option>
+<option value="2">Multiple (2)</option>
+<option value="3">Multiple (3)</option>
+</select>
+
+<div id="ordersContainer"></div>
+
+<button type="submit">Next →</button>
+
+</form>
+</div>
+
+<script>
+function generateForms() {
+    let count = document.getElementById("deliveryCount").value;
+    let container = document.getElementById("ordersContainer");
+    container.innerHTML = "";
+
+    for (let i = 0; i < count; i++) {
+        container.innerHTML += `
+        <div class="box">
+            <h3>Delivery ${i+1}</h3>
+
+            <label>Product Type</label>
+            <select name="product${i}">
+                <option>Milk</option>
+                <option>Cattle</option>
+                <option>Electronics</option>
+                <option>Furniture</option>
+                <option>Fragile</option>
+            </select>
+
+            <label>Destination City</label>
+            <select name="city${i}">
+                <option>Delhi</option>
+                <option>Mumbai</option>
+                <option>Chennai</option>
+                <option>Kolkata</option>
+                <option>Hyderabad</option>
+                <option>Bangalore</option>
+            </select>
+
+            <label>Weight (kg)</label>
+            <input type="number" name="weight${i}" required>
+
+            <label>Priority</label>
+            <select name="priority${i}">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        `;
+    }
+}
+
+// load 1 by default
+generateForms();
+</script>
+
+</body>
+</html>

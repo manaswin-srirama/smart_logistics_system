@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choose Transport</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="card">
+<h2>🤖 AI Recommendations</h2>
+
+<form action="/result" method="POST">
+
+{% for order in orders %}
+<div class="box">
+
+    <p><b>{{ order.product }}</b> → {{ order.city }}</p>
+    <p>Distance: {{ order.distance }} km</p>
+    <p>Recommended: {{ order.recommended }}</p>
+    <p>{{ order.reason }}</p>
+
+    <!-- SELECT TRANSPORT -->
+    <select name="transport{{ loop.index0 }}">
+        {% for key, value in order.options.items() %}
+        <option value="{{ key }}|{{ value }}">
+            {{ key }} - ₹{{ value }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <input type="hidden" name="city{{ loop.index0 }}" value="{{ order.city }}">
+    <input type="hidden" name="product{{ loop.index0 }}" value="{{ order.product }}">
+
+    <!-- CHART -->
+    <canvas id="chart{{ loop.index }}"></canvas>
+
+    <script>
+        var labels{{ loop.index }} = {{ order.options.keys() | list | tojson }};
+        var data{{ loop.index }} = {{ order.options.values() | list | tojson }};
+
+        new Chart(document.getElementById("chart{{ loop.index }}"), {
+            type: 'bar',
+            data: {
+                labels: labels{{ loop.index }},
+                datasets: [{
+                    label: "Cost Comparison",
+                    data: data{{ loop.index }}
+                }]
+            }
+        });
+    </script>
+
+</div>
+{% endfor %}
+
+<input type="hidden" name="count" value="{{ orders|length }}">
+
+<button type="submit">Confirm Selection</button>
+
+</form>
+</div>
+
+</body>
+</html>

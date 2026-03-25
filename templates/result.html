@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Final Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="card">
+    <h1>🚀 Final Delivery Plan</h1>
+
+    {% for item in selections %}
+    <p>
+        <b>{{ item.product }}</b> → {{ item.city }}
+        ({{ item.transport }}) - ₹{{ item.cost }}
+    </p>
+    {% endfor %}
+
+    <h2>Total Cost: ₹{{ total_cost }}</h2>
+
+    <!-- MAP -->
+    <div id="map" style="height:400px;"></div>
+</div>
+
+<script>
+function initMap() {
+
+    var route = {{ route | tojson | safe }};
+    var selections = {{ selections | tojson | safe }};
+
+    console.log("Route:", route);
+    console.log("Selections:", selections);
+
+    var start = "Delhi";
+
+    var map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 5,
+        center: {lat: 20.5937, lng: 78.9629}
+    });
+
+    var geocoder = new google.maps.Geocoder();
+    var directionsService = new google.maps.DirectionsService();
+
+    // Start marker
+    geocoder.geocode({ address: start }, function(results) {
+        new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+            label: "S"
+        });
+    });
+
+    selections.forEach((item, index) => {
+
+        geocoder.geocode({ address: item.city }, function(results) {
+
+            new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                label: String.fromCharCode(65 + index)
+            });
+
+            if (item.transport.includes("Flight")) {
+
+                // ✈️ Direct line
+                var flightPath = new google.maps.Polyline({
+                    path: [
+                        map.getCenter(),
+                        results[0].geometry.location
+                    ],
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeWeight: 2
+                });
+
+                flightPath.setMap(map);
+
+            } else {
+
+                // 🚚 Road route
+                var renderer = new google.maps.DirectionsRenderer({
+                    suppressMarkers: true
+                });
+
+                renderer.setMap(map);
+
+                directionsService.route({
+                    origin: start,
+                    destination: item.city,
+                    travelMode: google.maps.TravelMode.DRIVING
+                }, function(response, status) {
+                    if (status === "OK") {
+                        renderer.setDirections(response);
+                    }
+                });
+            }
+
+        });
+
+    });
+}
+</script>
+
+<!-- GOOGLE MAPS API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUUn9XL_pKG9MBkibwc0ECc90YrdsxNS4&callback=initMap" async defer></script>
+
+</body>
+</html>
